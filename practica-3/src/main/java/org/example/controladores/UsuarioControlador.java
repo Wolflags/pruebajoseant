@@ -56,7 +56,6 @@ public class UsuarioControlador extends BaseControlador{
                     CrearCookie(ctx, nombreUsuario);
                 }
                 ctx.sessionAttribute("usuario", user);
-                insertarLog(user.getUsername());
                 ctx.redirect("/");
             }else{
                 ctx.redirect("/login?loginError=true");
