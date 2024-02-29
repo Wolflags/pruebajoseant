@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Iniciar sesi&oacute;n · B L O G</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        #intro {
+            background-color: #5c636a;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Background image -->
+<div id="intro" class="bg-image shadow-2-strong">
+    <div class="mask d-flex align-items-center h-100" style="background-color: rgba(0, 0, 0, 0.8);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-5 col-md-8">
+                    <div th:if="${loginError}" class="alert alert-warning" role="alert">
+                        El usuario o la contrase&ntilde;a son incorrectos o el usuario esta inhabilitado.
+                    </div>
+                    <form class="bg-white rounded shadow-5-strong p-5" action="/verificacion" method="post">
+                        <!-- User input -->
+                        <div class="form-outline mb-4" data-mdb-input-init>
+                            <input type="text" id="username" name="username" class="form-control" />
+                            <label class="form-label" for="username">Nombre de usuario</label>
+                        </div>
+
+                        <!-- Password input -->
+                        <div class="form-outline mb-2" data-mdb-input-init>
+                            <input type="password" id="password" name="password" class="form-control" />
+                            <label class="form-label" for="password">Contrase&ntilde;a</label>
+                        </div>
+
+                        <div class="mb-4 form-check d-flex">
+                            <input type="checkbox" class="form-check-input ms-auto me-2" id="remember-me" name="remember-me">
+                            <label class="form-check-label" for="remember-me">Recu&eacute;rdame</label>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary btn-block"
+                                data-mdb-ripple-init>Iniciar sesi&oacute;n</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

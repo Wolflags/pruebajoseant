@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">B L O G</a>
+
+        <!-- Botones a la derecha -->
+        <div class="navbar-nav ml-auto">
+            <!-- Botón de login -->
+            <div th:if="${username} == null">
+                <a class="nav-link" href="/login">Iniciar sesi&oacute;n</a>
+            </div>
+
+            <!-- Botón de usuario -->
+            <div th:if="${username} != null" class="ml-lg-2">
+                <div class="nav-item dropdown">
+                    <a th:text="${username}" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ▼
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a th:if="${admin}" class="dropdown-item" href="/crear-usuario">Registrar usuario</a>
+                        <a th:if="${admin}" class="dropdown-item" href="/listar-usuario">Listar usuario</a>
+                        <a class="dropdown-item" href="/cerrar-sesion">Cerrar sesi&oacute;n</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div th:if="${errorEmpty}" class="alert alert-warning" role="alert">
+        Los campos nombre y contrase&ntilde;a son obligatorios.
+    </div>
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h2 class="mb-0">Editar Usuario</h2>
+        </div>
+        <div class="card-body">
+            <form id="formularioUsuario" onsubmit="sendPut(); return false;" th:action="@{/usuario/{nombre}/editar-usuario (nombre=${nombre})} ">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" th:value="${nombre}"
+                           placeholder="Ingrese el nombre de usuario">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contrase&ntilde;a:</label>
+                    <input type="text" class="form-control" id="password" rows="5" name="password" th:value="${password}"
+                           placeholder="Ingrese la contrase&ntilde;a">
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="admin" name="admin" th:checked="${admin}">
+                        <label class="form-check-label" for="admin">
+                            Permisos de administrador
+                        </label>
+                        <br>
+                        <input class="form-check-input" type="checkbox" id="autor" name="autor" th:checked="${autor}">
+                        <label class="form-check-label" for="autor">
+                            Permisos de autor
+                        </label>
+                        <br>
+                        <input class="form-check-input" type="checkbox" id="activo" name="activo" th:checked="${activo}">
+                        <label class="form-check-label" for="activo">
+                            Usuario activo
+                        </label>
+
+                    </div>
+                </div>
+                <br>
+                <div class="col-auto">
+                    <div class="card">
+                    <span th:if="${foto != null}">
+                        <img th:src="@{'data:'+${foto.getMimeType()}+';base64,'+${foto.getFotoBase64()}}"
+                             class="card-img-top" alt="Foto de perfil" id="foto" style="width: 150px; height: 150px;">
+                    </span>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="nuevaFoto">Cargar nueva foto</label>
+                    <input class="form-control" id="nuevaFoto" type="file" name="nuevaFoto" accept="image/*" onchange="cargarNuevaFoto(event)">
+                </div>
+                <button type="submit" class="btn btn-success float-right">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+    <br><br>
+</div>
+
+<script th:inline="javascript">
+    function sendPut() {
+        const form = document.getElementById("formularioUsuario");
+        const url = form.getAttribute("action");
+        const formData = new FormData(form);
+
+        // Verificar si se ha seleccionado una nueva foto
+        const nuevaFoto = document.getElementById("nuevaFoto").files[0];
+        if (!nuevaFoto) {
+            // Si no se selecciona una nueva foto, eliminar el campo de nuevaFoto del formData
+            formData.delete("nuevaFoto");
+        }
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("PUT", url, true);
+        xhttp.onload = function () {
+            let responseURL = xhttp.responseURL;
+            window.location.replace(responseURL);
+        };
+        xhttp.send(formData);
+    }
+
+    function cargarNuevaFoto(event) {
+        const nuevaFoto = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById("foto").src = e.target.result;
+        };
+        reader.readAsDataURL(nuevaFoto);
+    }
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
